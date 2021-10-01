@@ -1,12 +1,5 @@
 # Curiosity-driven Exploration by Self-supervised Prediction
 
-
-- [x] Advantage Actor critic [[1]](#references)
-- [x] Parallel Advantage Actor critic [[2]](#references)
-- [x] Curiosity-driven Exploration by Self-supervised Prediction [[3]](#references) [[5]](#references)
-- [x] Proximal Policy Optimization Algorithms [[4]](#references)
-
- 
 ## 1. Setup
 ####  Requirements
 
@@ -17,24 +10,22 @@
 - [OpenCV Python](https://pypi.python.org/pypi/opencv-python)
 - [PyTorch](http://pytorch.org/)
 - [tensorboardX](https://github.com/lanpa/tensorboardX)
-
+- [atari roms](http://www.atarimania.com/rom_collection_archive_atari_2600_roms.html) 
 
 ## 2. How to Train
-Modify the parameters in `config.conf` as you like.
+Modify the parameters in `config.conf`.
 ```
 python train.py
+```
+In a separate terminal:
+```
+tensorboard --logdir runs
 ```
 
 ## 3. How to Eval
 ```
 python eval.py
 ```
-
-## 4. Loss/Reward Graph
-- Breakout Env
-![image](https://user-images.githubusercontent.com/23333028/49057720-29ee9680-f244-11e8-865a-4ccfb360ddd6.png)
-
-
 
 References
 ----------
