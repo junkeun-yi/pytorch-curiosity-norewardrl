@@ -55,7 +55,7 @@ def main():
     sticky_action = False
     life_done = default_config.getboolean('LifeDone')
 
-    agent = RNDAgent
+    # agent = RNDAgent
 
     if default_config['EnvType'] == 'atari':
         env_type = AtariEnvironment
@@ -64,7 +64,8 @@ def main():
     else:
         raise NotImplementedError
 
-    agent = agent(
+    # TODO use RNDAgent instead?
+    agent = ICMAgent(
         input_size,
         output_size,
         num_worker,
