@@ -1,16 +1,36 @@
 # Curiosity-driven Exploration by Self-supervised Prediction
 
+Thanks for the code Paul !
+
 ## 1. Setup
 ####  Requirements
 
 ------------
 
-- python3.6
+- python3.7
 - gym
 - [OpenCV Python](https://pypi.python.org/pypi/opencv-python)
 - [PyTorch](http://pytorch.org/)
 - [tensorboardX](https://github.com/lanpa/tensorboardX)
 - [atari roms](http://www.atarimania.com/rom_collection_archive_atari_2600_roms.html) 
+
+## Installing
+Recommend using a conda environment
+```
+conda create -n [myenv] python=3.7
+```
+
+install requirements
+```
+pip install -r requirements.txt
+```
+
+install roms
+```
+python -m atari_py.import_roms ROMS
+```
+
+
 
 ## 2. How to Train
 Modify the parameters in `config.conf`.
