@@ -47,6 +47,20 @@ tensorboard --logdir runs
 python eval.py
 ```
 
+## 4. Running Environments:
+1. Atari games:
+EnvType: atari
+EnvID:
+- Breakout: Breakout-v0
+
+2. Mujoco
+EnvType: mujoco
+EnvID:
+- HalfCheetah: HalfCheetah-v2 or v3
+
+3. mario:
+EnvType: mario
+EnvID: SuperMarioBros-v0
 References
 ----------
 

@@ -16,12 +16,15 @@ def main():
 
     if env_type == 'mario':
         env = JoypadSpace(gym_super_mario_bros.make(env_id), COMPLEX_MOVEMENT)
-    elif env_type == 'atari':
+    elif env_type == 'atari' or env_type == 'mujoco':
         env = gym.make(env_id)
     else:
         raise NotImplementedError
     input_size = env.observation_space.shape  # 4
-    output_size = env.action_space.n  # 2
+    if env_type != 'mujoco':
+        output_size = env.action_space.n  # 2
+    else:
+        output_size = 1
 
     if 'Breakout' in env_id:
         output_size -= 1
@@ -68,6 +71,8 @@ def main():
         env_type = AtariEnvironment
     elif default_config['EnvType'] == 'mario':
         env_type = MarioEnvironment
+    elif default_config['EnvType'] == 'mujoco':
+        env_type = MujocoEnvironment
     else:
         raise NotImplementedError
 
