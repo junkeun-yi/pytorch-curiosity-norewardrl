@@ -1,0 +1,31 @@
+config.conf variables
+TrainMethod: model used for training
+- ICM
+EnvType: type of environment used
+- mario, atari, mujoco
+EnvID: ID of environment used
+- mario -> SuperMarioBros-v0,
+- atari -> Breakout
+- mujoco -> HalfCheetah-v2
+MaxStepPerEpisode: maximum number of steps per episode for the agent; used in envs.py
+LearningRate: learning rate for optimizer
+NumEnv: number of workers
+NumStep: number of steps per rollout (of each worker)
+Gamma: discount factor
+Lambda: GAE discount factor
+StableEps: not used right now ?????
+StateStackSize: not used right now ?????
+PreProcHeight: not used right now ????? preprocessing height, also used for history
+ProProcWidth: not used right now ????? preprocessing width, also used for history
+UseGAE: switch for GAE on reward estimation
+UseGPU: use cuda enabled GPUs
+UseNorm: not used right now ????? used for normalizing the observations / rewards ?
+UseNoisyNet: use noisy network for model -> noisy linear layer -> factorized gaussian noisynet
+ClipGradNorm: use torch.nn.clip_grad_norm_ on model parameters. not used in code right now ?????
+Entropy: entropy coefficient ... what is this ? not used in code right now ??????
+Epoch: number of epochs to train for
+MiniBatch: used to calculate batch size. batch size = num_steps*num_workers / mini_batch
+PPOEps: PPO clippling parameter.
+LifeDone: not used right now ????? in code, is a parameter for running the mario environment
+ObsNormStep: number of steps used to precalculate the norm of the observation
+ETA: Curiosity parameter; scaling factor for curiosity intrinsic loss.

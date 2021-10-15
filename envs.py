@@ -323,6 +323,18 @@ class MarioEnvironment(Process):
             self.history[i, :, :] = self.pre_proc(s)
 
 class MujocoEnvironment(Environment):
+    """[summary]
+
+    Args:
+        Environment ([type]): [description]
+        env_id (str): which environment ?
+        is_render (bool): render the environment (show the screen)
+        child_conn (multiprocessing.Connection): worker does work in this process
+        history_size (int): size of the replay buffer ? TODO: figure out what this is exactly
+        h (int): history buffer height
+        w (int): history buffer width
+        life_done (bool): only used for mario environment TODO: make it so that we don't pass this in if not mario ?
+    """
     def __init__(
             self,
             env_id,
@@ -335,7 +347,7 @@ class MujocoEnvironment(Environment):
             life_done=True):
         super(MujocoEnvironment, self).__init__()
         self.daemon = True
-        self.env = gym.make(env_id)
+        self.env = gym.make(env_id) # actual openai gym environment.
         self.env_id = env_id
         self.is_render = is_render
         self.env_idx = env_idx
@@ -355,13 +367,13 @@ class MujocoEnvironment(Environment):
     def run(self):
         super(MujocoEnvironment, self).run()
         while True:
-            action = self.child_conn.recv()
+            action = self.child_conn.recv() # receive action from parent process
             if self.is_render:
                 self.env.render()
 
-            s, reward, done, info = self.env.step(action)
+            s, reward, done, info = self.step(action) # take the action TODO: create an explicit step function.
 
-            if max_step_per_episode < self.steps:
+            if max_step_per_episode < self.steps: # stop if moved over the step limit
                 done = True
 
             log_reward = reward
@@ -385,9 +397,13 @@ class MujocoEnvironment(Environment):
             self.child_conn.send(
                 [self.history[:, :, :], reward, force_done, done, log_reward])
 
+    # TODO: https://github.com/openai/gym/blob/master/gym/envs/mujoco/half_cheetah.py
+    # look at above and change it so that we can have different rewards.
     def step(self, action):
-        return super(MujocoEnvironment, self).step(action)
+        s, reward, done, info = self.env.step(action) # look at HalfCheetah or smth and change reward for task adaptation
+        return s, reward, done, info
 
+    # TODO: does this need changing ?
     def reset(self):
         self.last_action = 0
         self.steps = 0
@@ -398,11 +414,13 @@ class MujocoEnvironment(Environment):
             self.pre_proc(s))
         return self.history[:, :, :]
 
+    # TODO: what the heck is this
     def pre_proc(self, X):
         X = np.array(Image.fromarray(X).convert('L')).astype('float32')
         x = cv2.resize(X, (self.h, self.w))
         return x
 
+    # TODO: uh ... what is this
     def get_init_state(self, s):
         for i in range(self.history_size):
             self.history[i, :, :] = self.pre_proc(s)

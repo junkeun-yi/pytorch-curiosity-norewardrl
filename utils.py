@@ -80,7 +80,7 @@ class RewardForwardFilter(object):
             self.rewems = self.rewems * self.gamma + rews
         return self.rewems
 
-
+# TODO: add temperature ?
 def softmax(z):
     assert len(z.shape) == 2
     s = np.max(z, axis=1)

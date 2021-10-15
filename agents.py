@@ -55,7 +55,7 @@ class ICMAgent(object):
     def get_action(self, state):
         state = torch.Tensor(state).to(self.device)
         state = state.float()
-        policy, value = self.model(state)
+        policy, value = self.model(state) # samples the CnnActorCriticNetwork
         action_prob = F.softmax(policy, dim=-1).data.cpu().numpy()
 
         action = self.random_choice_prob_index(action_prob)
@@ -78,6 +78,7 @@ class ICMAgent(object):
         action_onehot.zero_()
         action_onehot.scatter_(1, action.view(len(action), -1), 1)
 
+        # sample the ICMModel
         real_next_state_feature, pred_next_state_feature, pred_action = self.icm(
             [state, next_state, action_onehot])
         intrinsic_reward = self.eta * F.mse_loss(real_next_state_feature, pred_next_state_feature, reduction='none').mean(-1)

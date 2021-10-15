@@ -70,7 +70,8 @@ class Flatten(nn.Module):
     def forward(self, input):
         return input.view(input.size(0), -1)
 
-
+# TODO: make a better actor critic, also one that doesn't take in curiosity for the teacher.
+# The teacher should probably have configurable parameters instead of just a linear/leakyrelu/linear NN.
 class CnnActorCriticNetwork(nn.Module):
     def __init__(self, input_size, output_size, use_noisy_net=False):
         super(CnnActorCriticNetwork, self).__init__()
@@ -107,18 +108,21 @@ class CnnActorCriticNetwork(nn.Module):
             nn.LeakyReLU()
         )
 
+        # actor network
         self.actor = nn.Sequential(
             linear(512, 512),
             nn.LeakyReLU(),
             linear(512, output_size)
         )
 
+        # critic network
         self.critic = nn.Sequential(
             linear(512, 512),
             nn.LeakyReLU(),
             linear(512, 1)
         )
 
+        # TODO: what does orthogonal do ?
         for p in self.modules():
             if isinstance(p, nn.Conv2d):
                 init.orthogonal_(p.weight, np.sqrt(2))
@@ -138,6 +142,12 @@ class CnnActorCriticNetwork(nn.Module):
                 init.orthogonal_(self.critic[i].weight, 0.01)
                 self.critic[i].bias.data.zero_()
 
+    """
+    actor critic network forward function
+    grad.J(theta) = grad.log pi_theta(a|s) * A^pi(s, a)
+    pi = actor; takes in the action
+    advantage = critic; takes in the aciton too ?
+    """
     def forward(self, state):
         x = self.feature(state)
         policy = self.actor(x)
