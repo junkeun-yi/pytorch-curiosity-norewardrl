@@ -11,13 +11,28 @@ lam = float(default_config['Lambda'])
 train_method = default_config['TrainMethod']
 
 
+# TODO: disambiguate
 def make_train_data(reward, done, value, gamma, num_step, num_worker):
     discounted_return = np.empty([num_worker, num_step])
+
+    # TODO: don't know if i should keep this or change
+    reward = np.transpose(reward)
+    # value = np.transpose(value)
+    done = np.transpose(done)
 
     # Discounted Return
     if use_gae:
         gae = np.zeros_like([num_worker, ])
         for t in range(num_step - 1, -1, -1):
+            # print(t)
+            # print(reward.shape)
+            # print(reward[:, t])
+            # print(value.shape)
+            # print(value[:, t + 1])
+            # print(done.shape)
+            # print(done[:, t])
+            # print(value.shape)
+            # print(value[:, t])
             delta = reward[:, t] + gamma * value[:, t + 1] * (1 - done[:, t]) - value[:, t]
             gae = delta + gamma * lam * (1 - done[:, t]) * gae
 
@@ -67,7 +82,7 @@ class RunningMeanStd(object):
         self.var = new_var
         self.count = new_count
 
-
+# TODO: verify if this is correct; adding new reward and discounting rewems... what is rewems ?
 class RewardForwardFilter(object):
     def __init__(self, gamma):
         self.rewems = None

@@ -376,7 +376,7 @@ class MujocoEnvironment(Environment):
             if max_step_per_episode < self.steps: # stop if moved over the step limit
                 done = True
 
-            log_reward = reward
+            log_reward = reward # TODO: why do we need this ... ?
             force_done = done
 
             self.history[:3, :, :] = self.history[1:, :, :]
@@ -394,6 +394,7 @@ class MujocoEnvironment(Environment):
 
                 self.history = self.reset()
 
+            # send new observations and rewards along with other stats to parent.
             self.child_conn.send(
                 [self.history[:, :, :], reward, force_done, done, log_reward])
 

@@ -1,12 +1,16 @@
 config.conf variables
 TrainMethod: model used for training
-- ICM
+- ICM, AC, TODO: ICM_DISTILL
 EnvType: type of environment used
 - mario, atari, mujoco
 EnvID: ID of environment used
 - mario -> SuperMarioBros-v0,
 - atari -> Breakout
 - mujoco -> HalfCheetah-v2
+Discrete: discrete or continuous aciton space
+- True, False
+Render: visualize the environment
+- True, False
 MaxStepPerEpisode: maximum number of steps per episode for the agent; used in envs.py
 LearningRate: learning rate for optimizer
 NumEnv: number of workers

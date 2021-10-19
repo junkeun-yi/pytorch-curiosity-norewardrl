@@ -73,7 +73,7 @@ class Flatten(nn.Module):
 # TODO: make a better actor critic, also one that doesn't take in curiosity for the teacher.
 # The teacher should probably have configurable parameters instead of just a linear/leakyrelu/linear NN.
 class CnnActorCriticNetwork(nn.Module):
-    def __init__(self, input_size, output_size, use_noisy_net=False):
+    def __init__(self, input_size, output_size, discrete, use_noisy_net=False):
         super(CnnActorCriticNetwork, self).__init__()
 
         if use_noisy_net:
