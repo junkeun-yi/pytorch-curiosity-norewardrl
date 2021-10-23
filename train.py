@@ -6,6 +6,7 @@ from agents import *
 from config import *
 from envs import *
 from utils import *
+from rl_trainer import *
 
 
 def main():
@@ -15,6 +16,12 @@ def main():
     env_id = default_config['EnvID']
     env_type = default_config['EnvType']
 
+    # discrete or continuous action space
+    if default_config['Discrete'] == "True":
+        discrete = True
+    else:
+        discrete = False
+
     if env_type == 'mario':
         # default way of creating a mario environment in gym
         env = JoypadSpace(gym_super_mario_bros.make(env_id), COMPLEX_MOVEMENT)
@@ -23,20 +30,11 @@ def main():
         env = gym.make(env_id)
     else:
         raise NotImplementedError
-    # TODO: explain what the bottom few lines d
+        
     # input size: observation space shape of the input
-    #   because the input is TODO:
     # output_size: action space size of the input
-    #   because the output is TODO:
     input_size = env.observation_space.shape  # 4
-    if env_type != 'mujoco':
-        # discrete action space
-        output_size = env.action_space.n  # 2
-    else:
-        # continuous action space
-        # action space for continuous is a torch box, does not have explicit action_space.n like discrete
-        # TODO: fix this ? not sure what this is supposed to be
-        output_size = 1
+    output_size = env.action_space.n if discrete else env.action_space.shape[0]
 
     if 'Breakout' in env_id:
         output_size -= 1
@@ -46,11 +44,6 @@ def main():
 
     # TODO: change load_model and is_render to be configurable in config.conf
     is_load_model = False
-    
-    if default_config['Discrete'] == "True"
-        discrete = True
-    else:
-        discrete = False
 
     # visualize the environment
     if default_config['Render'] == "True":
@@ -343,7 +336,7 @@ def main():
                 # get new action from normalized observations
                 actions, value, policy = agent.get_action((states - obs_rms.mean) / np.sqrt(obs_rms.var))
 
-                print(actions)
+                # print(actions)
 
                 # send action to every worker
                 for parent_conn, action in zip(parent_conns, actions):

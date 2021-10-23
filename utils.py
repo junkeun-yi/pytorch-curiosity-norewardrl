@@ -10,6 +10,16 @@ use_gae = default_config.getboolean('UseGAE')
 lam = float(default_config['Lambda'])
 train_method = default_config['TrainMethod']
 
+# give stats for agent to train on
+def make_train_data2(reward, done, value, gamma, num_step, num_worker):
+    print("reward", reward.shape)
+    print("done", done.shape)
+    print("value", value.shape)
+
+    discounted_return = []
+    adv = []
+    
+    return discounted_return.reshape([-1]), adv.reshape([-1])
 
 # TODO: disambiguate
 def make_train_data(reward, done, value, gamma, num_step, num_worker):
@@ -19,7 +29,6 @@ def make_train_data(reward, done, value, gamma, num_step, num_worker):
     reward = np.transpose(reward)
     # value = np.transpose(value)
     done = np.transpose(done)
-
     # Discounted Return
     if use_gae:
         gae = np.zeros_like([num_worker, ])

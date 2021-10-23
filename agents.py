@@ -62,7 +62,10 @@ class ICMAgent(object):
 
         action = self.random_choice_prob_index(action_prob)
 
-        return action, value.data.cpu().numpy().squeeze(), policy.detach()
+        if self.discrete:
+            return action, value.data.cpu().numpy().squeeze(), policy.detach()
+        else: # TODO: fix
+            return policy.detach().cpu().numpy().squeeze(), value.data.cpu().numpy().squeeze(), policy.detach()
 
     @staticmethod
     def random_choice_prob_index(p, axis=1):
@@ -153,6 +156,7 @@ class ICMAgent(object):
 
                 self.optimizer.zero_grad()
                 loss = (actor_loss + 0.5 * critic_loss - 0.001 * entropy) + forward_loss + inverse_loss
+                print("loss: ", loss)
                 loss.backward()
                 # torch.nn.utils.clip_grad_norm_(self.model.parameters(), 0.5)
                 self.optimizer.step()
@@ -205,9 +209,14 @@ class ACAgent(object):
         policy, value = self.model(state) # samples the CnnActorCriticNetwork
         action_prob = F.softmax(policy, dim=-1).data.cpu().numpy()
 
+        # print(action_prob)
+
         action = self.random_choice_prob_index(action_prob)
 
-        return action, value.data.cpu().numpy().squeeze(), policy.detach()
+        if self.discrete:
+            return action, value.data.cpu().numpy().squeeze(), policy.detach()
+        else:
+            return policy.detach().cpu().numpy().squeeze(), value.data.cpu().numpy().squeeze(), policy.detach()
 
     @staticmethod
     def random_choice_prob_index(p, axis=1):
