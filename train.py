@@ -36,7 +36,7 @@ def main():
         # continuous action space
         # action space for continuous is a torch box, does not have explicit action_space.n like discrete
         # TODO: fix this ? not sure what this is supposed to be
-        output_size = 1
+        output_size = env.action_space.shape
 
     if 'Breakout' in env_id:
         output_size -= 1
