@@ -154,3 +154,5 @@ class ICMAgent(object):
                 loss.backward()
                 # torch.nn.utils.clip_grad_norm_(self.model.parameters(), 0.5)
                 self.optimizer.step()
+
+            print("loss", loss.item())

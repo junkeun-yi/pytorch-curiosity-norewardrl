@@ -285,6 +285,9 @@ def main():
         writer.add_scalar('data/int_reward_per_rollout', np.sum(total_int_reward) / num_worker, global_update)
         # -------------------------------------------------------------------------------------------
 
+        print("int_reward", np.sum(total_int_reward))
+        print("total_reward", np.sum(total_reward))
+
         # logging Max action probability
         writer.add_scalar('data/max_prob', softmax(total_logging_policy).max(1).mean(), sample_episode)
 
